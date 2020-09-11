@@ -1,4 +1,4 @@
-pragma solidity ^0.4.12;
+pragma solidity ^0.4.24;
 
  
 
@@ -18,7 +18,7 @@ contract SafeMath {
 
  
 
-    function safeAdd(uint256 x, uint256 y) internal Pure returns(uint256) {
+    function safeAdd(uint256 x, uint256 y) internal pure returns(uint256) {
 
         uint256 z = x + y;
 
@@ -30,7 +30,7 @@ contract SafeMath {
 
  
 
-    function safeSubtract(uint256 x, uint256 y) internal Pure returns(uint256) {
+    function safeSubtract(uint256 x, uint256 y) internal pure returns(uint256) {
 
         assert(x >= y);
 
@@ -42,7 +42,7 @@ contract SafeMath {
 
  
 
-    function safeMult(uint256 x, uint256 y) internal Pure returns(uint256) {
+    function safeMult(uint256 x, uint256 y) internal pure returns(uint256) {
 
         uint256 z = x * y;
 
@@ -95,9 +95,8 @@ contract StandardToken is Token {
             balances[msg.sender] -= _value;
 
             balances[_to] += _value;
-            
-            
-            Transfer(msg.sender, _to, _value);
+
+            emit Transfer(msg.sender, _to, _value);
 
             return true;
 
@@ -121,7 +120,7 @@ contract StandardToken is Token {
 
             allowed[_from][msg.sender] -= _value;
 
-            Transfer(_from, _to, _value);
+            emit Transfer(_from, _to, _value);
 
             return true;
 
@@ -147,7 +146,7 @@ contract StandardToken is Token {
 
         allowed[msg.sender][_spender] = _value;
 
-        Approval(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
 
         return true;
 
@@ -231,7 +230,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
     // 转换
 
-    function formatDecimals(uint256 _value) internal Pure returns (uint256 ) {
+    function formatDecimals(uint256 _value) internal pure returns (uint256 ) {
 
         return _value * 10 ** decimals;
 
@@ -239,7 +238,31 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-   
+    // constructor
+
+    constructor (address _ethFundDeposit, uint256 _currentSupply) public {
+
+        ethFundDeposit = _ethFundDeposit;
+
+ 
+
+        isFunding = false;                           //通过控制预CrowdS ale状态
+
+        fundingStartBlock = 0;
+
+        fundingStopBlock = 0;
+
+ 
+
+        currentSupply = formatDecimals(_currentSupply);
+
+        totalSupply = formatDecimals(10000000);
+
+        balances[msg.sender] = totalSupply;
+
+        if(currentSupply > totalSupply) return ;
+
+    }
 
  
 
@@ -273,7 +296,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
         currentSupply = safeAdd(currentSupply, value);
 
-        IncreaseSupply(value);
+        emit IncreaseSupply(value);
 
     }
 
@@ -291,7 +314,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
         currentSupply = safeSubtract(currentSupply, value);
 
-        DecreaseSupply(value);
+        emit DecreaseSupply(value);
 
     }
 
@@ -383,7 +406,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-        Migrate(msg.sender, tokens);               // log it
+        emit Migrate(msg.sender, tokens);               // log it
 
     }
 
@@ -423,7 +446,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-        AllocateToken(_addr, tokens);  // 记录token日志
+        emit AllocateToken(_addr, tokens);  // 记录token日志
 
     }
 
@@ -457,29 +480,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-        IssueToken(msg.sender, tokens);  //记录日志
-
-     }
-    
-     // constructor
-    
-    constructor (address _ethFundDeposit, uint256 _currentSupply)  public { 
-        
-        ethFundDeposit = _ethFundDeposit;
-
-        isFunding = false;
-
-        fundingStartBlock = 0;
-
-        fundingStopBlock = 0;
-
-        currentSupply = formatDecimals(_currentSupply);
-
-        totalSupply = formatDecimals(10000000);
-
-        balances[msg.sender] = totalSupply;
-
-        if(currentSupply > totalSupply)  return ;
+        emit IssueToken(msg.sender, tokens);  //记录日志
 
     }
 
