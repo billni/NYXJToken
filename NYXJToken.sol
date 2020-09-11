@@ -10,7 +10,7 @@ contract IMigrationContract {
 
  
 
-/* Áé¸ĞÀ´×ÔÓÚNAS  coin*/
+/* çµæ„Ÿæ¥è‡ªäºNAS  coin*/
 
 contract SafeMath {
 
@@ -176,9 +176,9 @@ contract NYXJToken is StandardToken, SafeMath {
 
     // metadata
 
-    string  public constant name = "BliBli";
+    string  public constant name = "NYXJ";
 
-    string  public constant symbol = "BCoin";
+    string  public constant symbol = "NYXJ";
 
     uint256 public constant decimals = 18;
 
@@ -188,15 +188,15 @@ contract NYXJToken is StandardToken, SafeMath {
 
     // contracts
 
-    address public ethFundDeposit;          // ETH´æ·ÅµØÖ·
+    address public ethFundDeposit;          // ETHå­˜æ”¾åœ°å€
 
-    address public newContractAddr;         // token¸üĞÂµØÖ·
+    address public newContractAddr;         // tokenæ›´æ–°åœ°å€
 
  
 
     // crowdsale parameters
 
-    bool    public isFunding;                // ×´Ì¬ÇĞ»»µ½true
+    bool    public isFunding;                // çŠ¶æ€åˆ‡æ¢åˆ°true
 
     uint256 public fundingStartBlock;
 
@@ -204,21 +204,21 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    uint256 public currentSupply;           // ÕıÔÚÊÛÂôÖĞµÄtokensÊıÁ¿
+    uint256 public currentSupply;           // æ­£åœ¨å”®å–ä¸­çš„tokensæ•°é‡
 
-    uint256 public tokenRaised = 0;         // ×ÜµÄÊÛÂôÊıÁ¿token
+    uint256 public tokenRaised = 0;         // æ€»çš„å”®å–æ•°é‡token
 
-    uint256 public tokenMigrated = 0;     // ×ÜµÄÒÑ¾­½»Ò×µÄ token
+    uint256 public tokenMigrated = 0;     // æ€»çš„å·²ç»äº¤æ˜“çš„ token
 
-    uint256 public tokenExchangeRate = 625;             // 625 BILIBILI ¶Ò»» 1 ETH
+    uint256 public tokenExchangeRate = 625;             // 625 BILIBILI å…‘æ¢ 1 ETH
 
  
 
     // events
 
-    event AllocateToken(address indexed _to, uint256 _value);   // ·ÖÅäµÄË½ÓĞ½»Ò×token;
+    event AllocateToken(address indexed _to, uint256 _value);   // åˆ†é…çš„ç§æœ‰äº¤æ˜“token;
 
-    event IssueToken(address indexed _to, uint256 _value);      // ¹«¿ª·¢ĞĞÊÛÂôµÄtoken;
+    event IssueToken(address indexed _to, uint256 _value);      // å…¬å¼€å‘è¡Œå”®å–çš„token;
 
     event IncreaseSupply(uint256 _value);
 
@@ -228,7 +228,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    // ×ª»»
+    // è½¬æ¢
 
     function formatDecimals(uint256 _value) internal pure returns (uint256 ) {
 
@@ -246,7 +246,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-        isFunding = false;                           //Í¨¹ı¿ØÖÆÔ¤CrowdS ale×´Ì¬
+        isFunding = false;                           //é€šè¿‡æ§åˆ¶é¢„CrowdS aleçŠ¶æ€
 
         fundingStartBlock = 0;
 
@@ -270,7 +270,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    ///  ÉèÖÃtoken»ãÂÊ
+    ///  è®¾ç½®tokenæ±‡ç‡
 
     function setTokenExchangeRate(uint256 _tokenExchangeRate) isOwner external {
 
@@ -286,7 +286,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    /// @dev ³¬·¢token´¦Àí
+    /// @dev è¶…å‘tokenå¤„ç†
 
     function increaseSupply (uint256 _value) isOwner external {
 
@@ -302,7 +302,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    /// @dev ±»µÁtoken´¦Àí
+    /// @dev è¢«ç›—tokenå¤„ç†
 
     function decreaseSupply (uint256 _value) isOwner external {
 
@@ -320,7 +320,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    ///  Æô¶¯Çø¿é¼ì²â Òì³£µÄ´¦Àí
+    ///  å¯åŠ¨åŒºå—æ£€æµ‹ å¼‚å¸¸çš„å¤„ç†
 
     function startFunding (uint256 _fundingStartBlock, uint256 _fundingStopBlock) isOwner external {
 
@@ -342,7 +342,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    ///  ¹Ø±ÕÇø¿éÒì³£´¦Àí
+    ///  å…³é—­åŒºå—å¼‚å¸¸å¤„ç†
 
     function stopFunding() isOwner external {
 
@@ -354,7 +354,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    /// ¿ª·¢ÁËÒ»¸öĞÂµÄºÏÍ¬À´½ÓÊÕtoken£¨»òÕß¸üĞÂtoken£©
+    /// å¼€å‘äº†ä¸€ä¸ªæ–°çš„åˆåŒæ¥æ¥æ”¶tokenï¼ˆæˆ–è€…æ›´æ–°tokenï¼‰
 
     function setMigrateContract(address _newContractAddr) isOwner external {
 
@@ -366,7 +366,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    /// ÉèÖÃĞÂµÄËùÓĞÕßµØÖ·
+    /// è®¾ç½®æ–°çš„æ‰€æœ‰è€…åœ°å€
 
     function changeOwner(address _newFundDeposit) isOwner() external {
 
@@ -378,7 +378,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    ///×ªÒÆtokenµ½ĞÂµÄºÏÔ¼
+    ///è½¬ç§»tokenåˆ°æ–°çš„åˆçº¦
 
     function migrate() external {
 
@@ -412,7 +412,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    /// ×ªÕËETH µ½BILIBILIÍÅ¶Ó
+    /// è½¬è´¦ETH åˆ°BILIBILIå›¢é˜Ÿ
 
     function transferETH() isOwner external {
 
@@ -424,7 +424,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    ///  ½«BILIBILI token·ÖÅäµ½Ô¤´¦ÀíµØÖ·¡£
+    ///  å°†BILIBILI tokenåˆ†é…åˆ°é¢„å¤„ç†åœ°å€ã€‚
 
     function allocateToken (address _addr, uint256 _eth) isOwner external {
 
@@ -446,13 +446,13 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-        emit AllocateToken(_addr, tokens);  // ¼ÇÂ¼tokenÈÕÖ¾
+        emit AllocateToken(_addr, tokens);  // è®°å½•tokenæ—¥å¿—
 
     }
 
  
 
-    /// ¹ºÂòtoken
+    /// è´­ä¹°token
 
     function () payable public {
 
@@ -480,7 +480,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-        emit IssueToken(msg.sender, tokens);  //¼ÇÂ¼ÈÕÖ¾
+        emit IssueToken(msg.sender, tokens);  //è®°å½•æ—¥å¿—
 
     }
 
