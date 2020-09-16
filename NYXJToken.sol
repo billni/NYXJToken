@@ -1,6 +1,4 @@
-pragma solidity ^0.4.24;
-
- 
+pragma solidity ^0.4.12;
 
 contract IMigrationContract {
 
@@ -8,15 +6,9 @@ contract IMigrationContract {
 
 }
 
- 
-
 /* 灵感来自于NAS  coin*/
 
 contract SafeMath {
-
- 
-
- 
 
     function safeAdd(uint256 x, uint256 y) internal pure returns(uint256) {
 
@@ -29,13 +21,10 @@ contract SafeMath {
     }
 
  
-
     function safeSubtract(uint256 x, uint256 y) internal pure returns(uint256) {
 
         assert(x >= y);
-
         uint256 z = x - y;
-
         return z;
 
     }
@@ -51,9 +40,6 @@ contract SafeMath {
         return z;
 
     }
-
- 
-
 }
 
  
@@ -80,13 +66,9 @@ contract Token {
 
  
 
- 
-
 /*  ERC 20 token */
 
 contract StandardToken is Token {
-
- 
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
 
@@ -108,7 +90,6 @@ contract StandardToken is Token {
 
     }
 
- 
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
 
@@ -133,7 +114,6 @@ contract StandardToken is Token {
     }
 
  
-
     function balanceOf(address _owner) constant public returns (uint256 balance) {
 
         return balances[_owner];
@@ -141,7 +121,6 @@ contract StandardToken is Token {
     }
 
  
-
     function approve(address _spender, uint256 _value) public returns (bool success) {
 
         allowed[msg.sender][_spender] = _value;
@@ -151,8 +130,6 @@ contract StandardToken is Token {
         return true;
 
     }
-
- 
 
     function allowance(address _owner, address _spender) constant public returns (uint256 remaining) {
 
@@ -176,15 +153,13 @@ contract NYXJToken is StandardToken, SafeMath {
 
     // metadata
 
-    string  public constant name = "NYXJ Token";
+    string  public constant name = "NYXJToken";
 
-    string  public constant symbol = "NYXJ";
+    string  public constant symbol = "NYXJ$";
 
     uint256 public constant decimals = 18;
 
     string  public version = "1.0";
-
- 
 
     // contracts
 
@@ -202,15 +177,13 @@ contract NYXJToken is StandardToken, SafeMath {
 
     uint256 public fundingStopBlock;
 
- 
-
     uint256 public currentSupply;           // 正在售卖中的tokens数量
 
     uint256 public tokenRaised = 0;         // 总的售卖数量token
 
     uint256 public tokenMigrated = 0;     // 总的已经交易的 token
 
-    uint256 public tokenExchangeRate = 625;             // 625 BILIBILI 兑换 1 ETH
+    uint256 public tokenExchangeRate = 625;             // 625 NYXJ 兑换 1 ETH
 
  
 
@@ -251,8 +224,6 @@ contract NYXJToken is StandardToken, SafeMath {
         fundingStartBlock = 0;
 
         fundingStopBlock = 0;
-
- 
 
         currentSupply = formatDecimals(_currentSupply);
 
@@ -310,8 +281,6 @@ contract NYXJToken is StandardToken, SafeMath {
 
         if (value + tokenRaised > currentSupply) return;
 
- 
-
         currentSupply = safeSubtract(currentSupply, value);
 
         emit DecreaseSupply(value);
@@ -329,8 +298,6 @@ contract NYXJToken is StandardToken, SafeMath {
         if (_fundingStartBlock >= _fundingStopBlock) return;
 
         if (block.number >= _fundingStartBlock) return;
-
- 
 
         fundingStartBlock = _fundingStartBlock;
 
@@ -412,7 +379,7 @@ contract NYXJToken is StandardToken, SafeMath {
 
  
 
-    /// 转账ETH 到BILIBILI团队
+    /// 转账ETH 到NYXJ团队
 
     function transferETH() isOwner external {
 
@@ -451,7 +418,6 @@ contract NYXJToken is StandardToken, SafeMath {
     }
 
  
-
     /// 购买token
 
     function () payable public {
@@ -460,7 +426,6 @@ contract NYXJToken is StandardToken, SafeMath {
 
         if (msg.value == 0) return;
 
- 
 
         if (block.number < fundingStartBlock) return;
 
@@ -472,13 +437,9 @@ contract NYXJToken is StandardToken, SafeMath {
 
         if (tokens + tokenRaised > currentSupply) return;
 
- 
-
         tokenRaised = safeAdd(tokenRaised, tokens);
 
         balances[msg.sender] += tokens;
-
- 
 
         emit IssueToken(msg.sender, tokens);  //记录日志
 
